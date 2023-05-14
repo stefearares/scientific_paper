@@ -1,0 +1,337 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[romanian]{babel}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{amsthm}
+\usepackage{pgfplots}
+\pgfplotsset{width=11cm,compat=1.9}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{csquotes}
+\usepackage{xcolor}
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+
+\addbibresource{mybibliography.bib}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{O comparație experimentală și
+teoretică a metodelor de sortare}
+\author{Rareș-Bodan Ștefea\\
+Departamentul de Informatică,\\
+Facultatea de Matematică şi Informatică,\\
+Universitatea de Vest Timişoara, România, \\
+Email: \href{mailto:rares.stefea03@e-uvt.ro}{\texttt{rares.stefea03@e-uvt.ro}}
+}
+%\date{Mai 2023}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+În următoarea lucrare, urmează să fie analizați diferiți algoritmi de sortare și modul în care aceștia se comportă in mediul teoretic în comparație cu mediul practic. Se vor observa diferențele în timpul de rezolvare a unei sarcini comune, dacă acestea există, se va analiza motivul pentru care aceste diferențe există, metode de ameliorare a diferențelor  și impactul pe care aceste diferențe îl produc în domeniul cercetării, al producției și al vieții de zi cu zi. Se vor sugera alternative , pe exemple concrete, cu scopul realizării cât mai eficiente a sarcinii de ordonare a unei liste cu un număr mare de elemente.
+\end{abstract}
+
+\pagebreak
+\tableofcontents
+\listoftables
+\pagebreak
+
+
+\section{Introducere}
+ \label{sec:introducere}
+
+ Algoritmii și structurile de date este un domeniu vast, cu nenumărați algoritmi predefiniți pe care îi considerăm buni deoarece așa ne dictează teoria, dar stau lucrurile așa? De multe ori, în viața de zi cu zi ne-am dat seama ca teoria nu se împacă atât de armonios cu realitatea cum ar vrea ea sa credem. Care sunt diferențele? Există ele?
+
+\subsection{Motivaţie}
+
+Comparația pusă în evidență în această lucrare, dintre teorie și practică, este de interes deoarece, pare să nu aibă "rezolvare", de asemenea, există numeroase metode de sortare însă timpul și resursele sunt limitate în toate aspectele:
+\begin{itemize}
+\item producție
+\item cercetare 
+\item confortul și răbdarea utilizatorului
+\end{itemize}
+Implementarea și testarea trebuie realizate cât mai rapid. Astfel, este necesară identificarea celui mai eficient algoritm de sortare pentru sarcina prezentată. De asemenea, discrepanțele dintre teorie și practică prezintă o problemă ce necesită revizuirea teoriei sau a practicii.
+\subsection{Descriere informală a soluției}
+Pentru a desluși această enigma vom descoperi cum se comportă cei mai populari algoritmi atât în situații "fictive" cât și în situații reale. Vom testa fiecare algoritm în parte pe liste de dimensiuni exponențiale cu elemente aranjate aleatoriu și vom încerca sa formulam un răspuns definitoriu la întrebarile puse în Secțiunea ~\ref{sec:introducere}.
+
+Listele sunt compuse din elemente(cifre de la 1 la un 1.000.000) dispuse în mod aleatoriu(încercând sa imite cat mai mult problemele din viața reală). Fiecare algoritm de sortare va fi rulat de cinci ori pe acest vector și se va creea un clasament în funcție de rezultatele obținute.
+De asemenea, un clasament similar va fi creat din punct de vedere teoretic pentru toți algoritmii. Astfel, vom putea descoperi posibile diferențe între partea teoretică și cea practcă.
+
+Un exemplu accesibil este diferența de eficiență dintre Merge Sort și Shell Sort. Deși, din punct de vedere teoretic, Merge Sort este mai eficient ca Shell Sort, în partea experimentală, pe un vector de un milion de elemente, sortate aleatoriu, Shell Sort a reușit să întreacă Merge Sort. Astfel, se poate trage concluzia că pentru un vector de un milion de elemente Shell Sort este mult mai eficent din punct de vedere al timpului de execuție.
+
+\subsection{Exemplu complex}
+Pe un vector cu elemente ordonate aleatoriu ce reprezintă cifre de la 1 la 1.000.000, utilizând funcția random.shuffle() din librăria Python:"random", s-au aplicat în mod teoretic și practic următorii algoritmi de sortare, preluați din ~\cite{ZAHARIE2008}:
+\begin{description}
+\item[Bubble sort:]  Este un algoritm de sortare aplicat pe o lista de elemente sortată sau nesortată. Acest algoritm compară, în mod repetat, două elemente aflate pe poziții consecutive și le interschimbă în cazul în care valoarea unui element este mai mare decât cea a elementului vecin, în mod crescator sau descrescator. Eficiența unui astfel de algoritm de sortare este în cel mai rău caz(cazul cand vectorul este sortat descrescător iar sortarea se face crescător) este O($n^2$), în cel mai bun caz(cand vectorul este deja sortat) este O(n) iar în cazul mediu este O($n^2$).
+\item[Quicksort: ] Este un algoritm de sortare aplicat pe o lista de elemente sortată sau nesortată. Acest algoritm se bazează pe tehnica "Divide Et Impera",  care presupune alegerea unui element de tip "pivot", ales în așa fel încât elementele din stânga, respectiv dreapta, să fie mai mici sau mai mari. Elementele din stânga și din dreapta sunt alese în aceeași manieră. Procesul continuă până când rămane un singur element, restul elementelor fiind sortate. Eficiența unui astfel de algoritm de sortare este în cel mai rău caz(cazul cand vectorul este sortat descrescător iar sortarea se face crescător) este O($n^2$), în cel mai bun caz(cand vectorul este deja sortat) este O($n*log n$) iar în cazul mediu este O($n*log n$).
+\end{description}
+Pentru fiecare algoritm se primește o listă de elemente nesortate de la 1 la un 1.000.000. Acest procedeu este reîncercat de cinci ori, făcându-se o medie a timpului de execuție pentru fiecare algoritm. Din punct de vedere teoretic algoritm mai eficient este \textbf{Quicksort}. Iar experimentele dovedesc acest lucru. \textbf{Quicksort} depașind considerabil \textbf{Bubble Sort} din punct de vedere experimental și teoretic.
+
+În continuarea lucrării, în Secţiunea~\ref{sec:formala} se va discuta explicit rezultatul experimentului si comparațiile teoretice dintre cei doi algoritmi și mulți alții, în Subsecţiunea~\ref{sub:prel}.
+\subsection{Declarație de originalitate}
+Pentru această lucrare am preluat algoritmii și complexitatea lor din ~\cite{SKIENA2008} și ~\cite{ZAHARIE2008}. Fiecare algoritm ales a fost supus unui test teoretic și practic, realizat de mine. Am creeat mediul pentru aceste teste, le-am rulat și le-am clasificat într-un tabel. Am implementat algoritmii și i-am modificat pentru a putea rula pe propriul hardware(fără să alterez complexitatea lor).
+\subsection{Instrucțiuni privind organizarea lucrării}
+Lucrarea este organizata în șase părti(vizibile în cuprins).
+
+În Introducere \ref{sec:introducere}, se prezintă problema abordată în lucrare, motivul și două exemple scurte aduse la cunoștință.
+
+În Prezentarea formală a problemei și soluție \ref{sec:formala} se abstractizează tema abordată în lucrare și sunt descrise proprietățile soluției.
+
+În Modelarea și implementarea problemei si soluției \ref{sec:modelare} se prezintă parți tehnice legate de hardware, de modul în care partea practică a fost implementată cu ajutorul părții teoretice și cum pot fi interpretate testele(pregătirea mediului).
+
+În Studiu de caz \ref{sec:studiudecaz}, se prezintă implementarea în sine, rezultatele de ieșire și modul în care acestea trebuie interpretate, cu scopul reîncercării a experimentului de către cititor.
+
+În Comparații cu literatura \ref{sec:comp}, se prezintă diferite metode de abordare a aceleași probleme și se discuta diferența rezultatelor.
+
+În Direcții Viitoare \ref{sec:concluzii}, se prezintă un sumar al lucrării și al rezultatelor obținute și se prezintă viitori pași de urmat pe acest subiect precum și posibile modificări.
+
+
+\section{Prezentare formală a problemei şi soluţiei}
+\label{sec:formala}
+
+În această secțiune se vor utiliza notațiile din~\cite{SKIENA2008}. 
+Problema redată de diferențele dintre metodele teoretice și practice privind timpul de executare al unui algoritm comun reprezintă o problemă de interes major. Dacă existe diferențe mari, spre exemplu eficiența mai bună a unui algoritm de complexitate O($nlog n$) în comparație cu un algoritm de complexitate O($n^2$) este necesară o reevaluare a metodei teoretice. Această problema este evidentă în domeniile care necesită ordonarea și distribuirea corectă și eficeintă a unui volum mare de date. 
+
+\subsection{Preliminarii}
+\label{sub:prel}
+
+
+Algoritmii fundamentali sunt preluați din~\cite{ZAHARIE2008}, Bogosort este preluat din~\cite{BOGO2013} iar Cocktail Shaker și Gnome Sort sunt adaptați din ~\cite{COMP2015}.
+Pentru analiza algoritmilor vom folosi modelul RAM(Random Memory Access Machine), de asemenea se vor analiza doar metode de sortare internă în aceeași zonă de memorie. Metodele utilizate sunt caracterizate prin(regăsite în \cite{ZAHARIE2008}):
+\begin{description}
+\item [Stabilitate ] O metodă de sortare este considerată stabilă dacă ordinea relativă a elementelor ce au aceeași valoare a cheii nu se modifică în procesul de sortare.
+\item[Naturalețe ] O metodă de sortare este considerată naturală dacă numărul de operații scade odată cu distanța dintre tabloul inițial și cel sortat. O măsură a acestei distanțe poate fi numărul de inversiuni al permutării corespunzătoare tabloului inițial.
+\item[Eficiență ] O metodă este considerată eficientă dacă nu necesită un volum mare de resurese. Din punctul de vedere al spațiului de memeorie o metodă de sortare pe loc este mai eficientă decât una bazată pe zonă de manevră de dimensiunea tabloului. Din punct de vedere al timpului de execuție este important să fie efectuate cât mai puține operții. O metodă este considerată optimală dacă ordinul său de complexitate este cel mai mic din clasa de metode din care face parte .
+\end{description}
+Principiul prin care comparația va fi efectuată este cel al complexității de timp. Astfel, algoritmii au fost clasați în următorul tabel în funcție de eficiența lor.
+\begin{table}[ht]
+\caption{Complexitatea algoritmilor de sortare}
+\centering
+\begin{tabular}{c c c c} 
+\hline\hline 
+Numele algoritmului\ &Cazul bun \ & Cazul mediu\ & Cazul rău \\ [0.5ex] 
+
+\hline 
+Selection Sort & $\Omega(n^2)$ & $\theta(n^2)$ & O($n^2$) \\ 
+Bubble Sort & $\Omega(n)$ & $\theta(n^2)$ & O($n^2$) \\
+Insertion Sort & $\Omega($n$)$ & $\theta(n^2)$ & O($n^2$) \\
+Quick Sort & $\Omega(n*log n)$ & $\theta(n*log n)$ & O($n^2$) \\
+Merge Sort & $\Omega(n*log n)$ & $\theta(n*log n)$ & O($n^2$) \\
+Radix Sort & $\Omega(n*k)$ & $\theta(n*k)$ & O($n*k$) \\ 
+Shell Sort & $\Omega(n*log n)$ & $\theta(n*log n)$ & O($n^2$)\\
+Count Sort &  $\Omega(n+k)$ & $\theta(n+k)$ & O($n+k$)\\
+Cocktail Shaker Sort&  $\Omega(n)$ & $\theta(n^2)$ & O($n^2$)\\
+Gnome Sort &  $\Omega(n^2)$ & $\theta(n^2)$ & O($n^2$)\\
+Bogosort &  $\Omega(n+1!)$ & $\theta((n+1)!)$ & O($n+1!$)\\[1ex]
+
+\hline 
+\end{tabular}
+\label{table:nonlin} 
+\end{table}
+
+Deși memoria are un rol important în clasarea algoritmilor, aceasta nu va juca un rol decisiv în clasamentul și în analizele realizate în următoarea lucrare.
+De asemenea, ne vom concentra, în mare parte, pe cazul general, întrucât în viața reală seturile de date ce trebuie prelucrate sunt în cazuri rare direct sortate sau sortate invers. Astfel, în partea teoretică vom realiza clasamentul utilizând doar cazul mediu(general).
+
+\subsection{Formalizare a problemei}
+\label{secece}
+Se va prezenta în detaliu o analiză a complexității a multiplelor metode de sortare prezentate anterior.
+Aceasta analiză va fi, ulterior, supusă asupra unui vector de elemente sortat aleatoriu cu cifre de la 1 la 1.000.000(fară să se repete).
+Pentru a sublinia modul în care algoritmii au fost aleși și evaluați vom considera următorul exemplu care reprezintă sortarea prin selecție.
+
+Iddea de bază a metodei este următoarea:
+
+Pentru fiecare poziție i, începând cu prima, se selectează din subtabloul ce începe cu acea poziție cel mai mic element și se amplasează pe locul respectiv.
+Varianta în pseudocod al acestui algoritm este:
+
+\begin{lstlisting}
+    for i=1,i<n-1 do
+       k=i
+       for j=i+1, j<n do
+        if x[k]>x[j] then
+            k=j
+            endif
+            endfor
+        if k=/=i then
+            x[k]<->x[i]
+        endif
+    endfor
+\end{lstlisting}
+ Indiferent de aranjarea inițială a elementelor, numărul de comparații efectuate este
+
+\[ T(n)=\sum_{i=1}^{n-1} \sum_{j=i+1}^{n} 1= \sum_{i=1}^{n-1}(n-i)=n(n-1)-\frac{n(n-1)}{2}=\frac{n(n-1)}{n} \]
+
+În cazul cel mai favorabiș numărul interschimbărilor este 0. În cazul cel mai defavorabil pentru fiecare i se efectueaza o interschimbare. Astfel se obține faptul că acest algoritm aparține clasei $\theta(n^2)$.
+
+Demonstrarea pentru restul algoritmilor utilizați se regasește în ~\cite{ZAHARIE2008}.
+
+\subsection{Soluţia algoritmică}
+
+Pornind de la exemplul demonstrat în ~\ref{secece} se poate calcula, cu valorile preluate din tabelul complexitățiilor, complexitățiile pentru algoritmii propuși în cazul ordonării ipotetice a unui vector cu un milion de elemente de la 1 la 1.000.000.
+
+Pentru a reprezenta într-un mod cât mai fidel realitatea vom lua în calcul strict complexitatea în cazul mediu. De asemenea, algoritmii cu complexități identice vor fi calculați și contorizați împreună.
+
+Astfel, complexitățiile devin următoarele:
+
+\begin{description}
+    \item[Quick Sort și Merge Sort:] 
+    \[O(1000000*log1000000)=
+    O(1000000*19.93156856932)=O(19931568) \] 
+    \item[ Shell Sort]
+    \[ O(1000000^\frac{4}{3})=O(100000000)\]
+    \item[Insertion Sort, Selection Sort, Cocktail Shaker Sort și Gnome Sort] 
+    \[O(1000000^2)=O(1000000000000)\] 
+    \item[Bogosort]
+    \[O(1000001!)\]
+    \item[Counting Sort] 
+    \[k=cel mai mare element - cel mai mic element \implies
+      O(1000000+999999)=O(1999999)\] 
+    \item[Radix Sort] $b=10$ iar $d=7$
+ $\implies$ \[O(7*(1000000+10)=O(7000070)\]
+\end{description}
+În urma calculelor clasamentul rămâne neschimbat, acesta fiind în continuare: 
+\begin{enumerate}[P1.]
+        \item  \textbf{Quick Sort}
+        \item  \textbf{Merge Sort}
+        \item  \textbf{Shell Sort}
+        \item  \textbf{Insertion Sort}
+        \item  \textbf{Selection Sort}
+        \item  \textbf{Bubble Sort}
+        \item  \textbf{Cocktail Shaker Sort}
+        \item  \textbf{Gnome Sort}
+        \item  \textbf{Bogosort}
+    \end{enumerate}
+\section{Modelare şi implementare}
+\label{sec:modelare}
+Algoritmii au fost rescriși din pseudocod în limbajul Python pentru a putea fi rulați pe un calculator personal. Implementarea a fost făcută încercând să nu modifice în vreun fel eficiența algoritmilor.
+\subsection{ Informațiile sistemului}
+Calculatorul pe care au fost rulate experimentele are următoarele specificații tehnice:
+CPU:Intel i7-10750H(5Ghz), RAM:16GB, SSD 512GB, Windows 64-bit.
+Structurile de date necesare implementării sunt variabile întregi și vectori de numere întregi.
+
+De asemenea, este necesar un fișier pentru stocarea tuturor celor 1.000.000 de elemente ale vectorului(deși este posibila stocarea acestora și în mediul de lucru, fișierele ne ușurează munca).
+Este recomandata instalarea interpretorului PyCharm de la link-ul \url{https://www.jetbrains.com/pycharm/}, se pot utiliza și alte interpretatoare.
+\subsection{Informații implementare}
+\label{dific}
+Înainte de implementare este necesară creearea unui vector de un milion de elemente. Pentru acest lucru este necesara implementarea biblotecii \emph{random} din Python și aplicării funcției random.shuffle() asupra vectorului creat mai devreme.
+\begin{lstlisting}
+    import random
+    for i in range(1,1000001)
+    v[i]=i;
+    random.shuffle(v);
+\end{lstlisting}
+Dupa adaugarea elementelor din vector într-un fișier este necesară implementarea funcțiilor de sortare pentru sortarea algoritmilor.
+
+
+\section{Studiu de caz}
+\label{sec:studiudecaz}
+Datele se preiau din fișierul creat(sau vectorul) și se implementează câte o funcție specifică pentru fiecare algoritm de sortare, codurile se poate regăsi la \href{https://github.com/stefearares}{Implementare Algoritmi}, spre exemplu:
+\begin{lstlisting}
+    def bubbleSort(arr):
+    n = len(arr)
+    swapped = False
+    for i in range(n-1):
+        for j in range(0, n-i-1):
+            if arr[j] > arr[j + 1]:
+                swapped = True
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]         
+        if not swapped:
+            return
+\end{lstlisting}
+Întrucât nu există complexitate efectivă, felul în care se va face testul este: se ruleaza fiecare algoritm de sortare de 5 ori, se notează fiecare timp de rulare și se face o medie aritmetică a lor și la final se clasează într-un tabel.
+Tabelul este necesar pentru a observa diferențele dintre partea teoretică și cea experimentală.
+Fiecare algoritm se rulează de 5 ori pentru a obține o precizie cât mai bună a timpului necesar fiecărei sortări.
+
+Rezultatele experimentale se pot observa în următorul tabel:
+\begin{table}[ht]
+\caption{Complexitatea algoritmilor de sortare}
+\centering
+\begin{tabular}{c c} 
+\hline\hline 
+Numele algoritmului\ & Timp de execuție pentru un milion de elemente \\ [0.5ex] 
+
+\hline 
+Quick Sort & $1.99$ minute\\ 
+Shell Sort & $3.94$ minute\\
+Merge Sort & $4.11$ minute\\
+Radix Sort & $6.25$ minute \\
+Insertion Sort & $25.06$ minute \\
+Selection Sort & $57.65$ minute\\ 
+Gnome Sort & $59.31$ minute\\
+Cocktail Shaker Sort &  $65.03$ minute\\
+Counting Sort&  $70.20$ minute\\
+Bubble Sort &  $160+$ minute\\
+Bogosort &  $10+$ ore\\[1ex]
+
+\hline 
+\end{tabular}
+\label{table:nonlin} 
+\end{table}
+
+Clasamentul este destul de apropiat de cel teoretic.
+Singurele diferențe fiind prezente la algoritmi mai complecși.
+
+Aceste difernțe sunt ușor de explicat prin comportamentul hardware-ului, este posibil ca CPU-ul să priotieze diferit sarcinile. Astfel, un algoritm de lungă durata este pus pe o prioitate mai joasă în comparație cu unul mai rapid. O altă diferență reprezintă și performanța, arhitectura calculatorului și temperatura CPU-ului.  Pentru un algoritm care folosește mai multă putere de calcul, temperatura crește iar CPU-ul nu mai este la fel de performant ca la început.
+De asemenea, diferențele apar si datorită funcționalității algoritmilor, spre exemplu \textbf{Counting sort} este mult mai eficient ca \textbf{Merge Sort} pe elemente cu valori mici, datorită modului în care funcționează algoritmul. \textbf{Bubble Sort} este  mai eficient ca \textbf{Merge Sort} 
+pentru un vector cu 10 elemente, motiv pentru care \textbf{Merge Sort} își păstrează poziția în tabel.
+
+\section{Comparaţia cu literatura}
+\label{sec:comp}
+Lucruri similare au fost abordate în~\cite{LAMFO2019}.
+Este abordată aceeași problemă, diferențe majore se observă în modul de testare, astfel, lucrarea citată prezintă 20 de teste cu dimensiunea vectorului variată între 25000 și 50000 cu numere generate în mod aleatoriu de la 1 la 10000. Rezultatul fiind unul neconclusiv întrucât fiecare algoritm depinde de lista de elemente pe care este implementat. De asemenea, lucrarea pune multă importanță pe stabilitate, lucru pe care l-am considerat irelevant în testele mele.
+
+Această abordare are avantajul preciziei, astfel, rezultatele sunt mult mai precise, marja de evaluare fiind tot mai restrânsă. 
+Însă un dezavantaj major îl reprezintă faptul că numerele sunt aleatoriu introduse, acestea putând să fie deja ordonate și să aibă multe valori care se repetă.
+
+Abordarea mea caută să elimine acest dezavantaj și să arate cum s-ar comporta acești algoritmi într-o situație reală.
+
+O altă abordare este prezentată în ~\cite{COMP2015}. Abordarea prezentată ia în calcul și cazurile în care lista este deja ordonată, pentru o legătura mai strânsă între realitate și teorie am ales să rulez algoritmii pe liste nesortate.
+
+Încă o abordare, mai detaliată este regăsită și în ~\cite{HUTTER201479}.
+\section{Concluzii şi direcţii viitoare}
+\label{sec:concluzii}
+Lucrarea a început cu o întrebare formulată în Secțiunea
+~\ref{sec:introducere}, iar răspunsul constă în faptul că diferențele există. Aceste diferențe pleacă de la hardware-ul folosit și ajung până la datele din practică care ne sunt oferite.
+
+Nu există un algoritm care să fie eficient atât pe un volum de date mic cât și pe un volum de date mari. Este necesară selecționarea lor în funcție de necesitățile impuse de ce anume trebuie rezolvat.
+Aceste mici diferențe între teorie și practică sunt normale aproape peste tot. În practică, un algoritm este supus mai multor influențe externe.
+
+Dificultățile întâlnite în această lucrare au fost numeroase, de la insuficiența memoriei pe CPU din Secțiunea \ref{dific}, rezolvată prin crearea succesiva a numerelor aleatorii de la 1-100000, 100000-200000 și așa mai departe. Alte dificultăți au apărut în momentul rulării algoritmilor pe listă, unii algoritmi au avut o durata enormă datorită limitării impuse de hardware.
+
+\pagebreak
+Aceasta lucrare deschide calea și mai multor întrebări, spre exemplu:"Cum se alege algoritmul potrivit pentru un anumit volum de date?" și "Cum se pot îmbina acești algoritmi pentru a obține o eficiență cât mai buna?".
+
+Aceste întrebări pot prezenta un viitor subiect iar felul în care problema din această lucrare a fost abordată poate fi îmbunătățită în viitor.
+\pagebreak
+\printbibliography
+\end{document}
