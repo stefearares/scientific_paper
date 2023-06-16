@@ -96,7 +96,11 @@ Pe un vector cu elemente ordonate aleatoriu ce reprezintă cifre de la 1 la 1.00
 \item[Bubble sort:]  Este un algoritm de sortare aplicat pe o lista de elemente sortată sau nesortată. Acest algoritm compară, în mod repetat, două elemente aflate pe poziții consecutive și le interschimbă în cazul în care valoarea unui element este mai mare decât cea a elementului vecin, în mod crescator sau descrescator. Eficiența unui astfel de algoritm de sortare este în cel mai rău caz(cazul cand vectorul este sortat descrescător iar sortarea se face crescător) este O($n^2$), în cel mai bun caz(cand vectorul este deja sortat) este O(n) iar în cazul mediu este O($n^2$).
 \item[Quicksort: ] Este un algoritm de sortare aplicat pe o lista de elemente sortată sau nesortată. Acest algoritm se bazează pe tehnica "Divide Et Impera",  care presupune alegerea unui element de tip "pivot", ales în așa fel încât elementele din stânga, respectiv dreapta, să fie mai mici sau mai mari. Elementele din stânga și din dreapta sunt alese în aceeași manieră. Procesul continuă până când rămane un singur element, restul elementelor fiind sortate. Eficiența unui astfel de algoritm de sortare este în cel mai rău caz(cazul cand vectorul este sortat descrescător iar sortarea se face crescător) este O($n^2$), în cel mai bun caz(cand vectorul este deja sortat) este O($n*log n$) iar în cazul mediu este O($n*log n$).
 \end{description}
-Pentru fiecare algoritm se primește o listă de elemente nesortate de la 1 la un 1.000.000. Acest procedeu este reîncercat de cinci ori, făcându-se o medie a timpului de execuție pentru fiecare algoritm. Din punct de vedere teoretic algoritm mai eficient este \textbf{Quicksort}. Iar experimentele dovedesc acest lucru. \textbf{Quicksort} depașind considerabil \textbf{Bubble Sort} din punct de vedere experimental și teoretic.
+Pentru fiecare algoritm se primește o listă de elemente nesortate de la 1 la un 1.000.000. Acest procedeu este reîncercat de cinci ori, făcându-se o medie a timpului de execuție pentru fiecare algoritm. Din punct de vedere teoretic algoritm mai eficient este \textbf{Quicksort}. 
+\pagebreak
+
+
+Iar experimentele dovedesc acest lucru. \textbf{Quicksort} depașind considerabil \textbf{Bubble Sort} din punct de vedere experimental și teoretic.
 
 În continuarea lucrării, în Secţiunea~\ref{sec:formala} se va discuta explicit rezultatul experimentului si comparațiile teoretice dintre cei doi algoritmi și mulți alții, în Subsecţiunea~\ref{sub:prel}.
 \subsection{Declarație de originalitate}
@@ -173,7 +177,7 @@ Idea de bază a metodei este următoarea:
 
 Pentru fiecare poziție i, începând cu prima, se selectează din subtabloul ce începe cu acea poziție cel mai mic element și se amplasează pe locul respectiv.
 Varianta în pseudocod al acestui algoritm este:
-
+\pagebreak
 \begin{lstlisting}
     for i=1,i<n-1 do
        k=i
@@ -191,7 +195,7 @@ Varianta în pseudocod al acestui algoritm este:
 
 \[ T(n)=\sum_{i=1}^{n-1} \sum_{j=i+1}^{n} 1= \sum_{i=1}^{n-1}(n-i)=n(n-1)-\frac{n(n-1)}{2}=\frac{n(n-1)}{n} \]
 
-În cazul cel mai favorabiș numărul interschimbărilor este 0. În cazul cel mai defavorabil pentru fiecare i se efectueaza o interschimbare. Astfel se obține faptul că acest algoritm aparține clasei $\theta(n^2)$.
+În cazul cel mai favorabil numărul interschimbărilor este 0. În cazul cel mai defavorabil pentru fiecare i se efectueaza o interschimbare. Astfel se obține faptul că acest algoritm aparține clasei $\theta(n^2)$.
 
 Demonstrarea pentru restul algoritmilor utilizați se regasește în ~\cite{ZAHARIE2008}.
 
@@ -243,7 +247,7 @@ De asemenea, este necesar un fișier pentru stocarea tuturor celor 1.000.000 de 
 Este recomandata instalarea interpretorului PyCharm de la link-ul \url{https://www.jetbrains.com/pycharm/}, se pot utiliza și alte interpretatoare.
 \subsection{Informații implementare}
 \label{dific}
-Înainte de implementare este necesară creearea unui vector de un milion de elemente. Pentru acest lucru este necesara implementarea biblotecii \emph{random} din Python și aplicării funcției random.shuffle() asupra vectorului creat mai devreme.
+Înainte de implementare este necesară creearea unui vector de un milion de elemente. Pentru acest lucru este necesara utilizarea biblotecii \emph{random} din Python și aplicării funcției random.shuffle() asupra vectorului creat mai devreme.
 \begin{lstlisting}
     import random
     for i in range(1,1000001)
@@ -256,6 +260,7 @@ Dupa adaugarea elementelor din vector într-un fișier este necesară implementa
 \section{Studiu de caz}
 \label{sec:studiudecaz}
 Datele se preiau din fișierul creat(sau vectorul) și se implementează câte o funcție specifică pentru fiecare algoritm de sortare, codurile se poate regăsi la \href{https://github.com/stefearares}{Implementare Algoritmi}, spre exemplu:
+\pagebreak
 \begin{lstlisting}
     def bubbleSort(arr):
     n = len(arr)
@@ -272,7 +277,34 @@ Datele se preiau din fișierul creat(sau vectorul) și se implementează câte o
 Tabelul este necesar pentru a observa diferențele dintre partea teoretică și cea experimentală.
 Fiecare algoritm se rulează de 5 ori pentru a obține o precizie cât mai bună a timpului necesar fiecărei sortări.
 
-Rezultatele experimentale se pot observa în următorul tabel:
+Rezultatele experimentale se pot observa în următoarele tabele:
+
+
+\begin{table}[ht]
+\caption{Complexitatea algoritmilor de sortare}
+\centering
+\begin{tabular}{c c} 
+\hline\hline 
+Numele algoritmului\ & Timp de execuție pentru o sută de mii de elemente \\ [0.5ex] 
+
+\hline 
+Quick Sort & $9.97$ secunde\\ 
+Shell Sort & $11.37$ secunde\\
+Merge Sort & $13.72$ secunde\\
+Radix Sort & $6.25$ secunde\\
+Insertion Sort & $15.04$ secunde\\
+Selection Sort & $25.35$ secunde\\ 
+Gnome Sort & $34.56$ secunde\\
+Cocktail Shaker Sort &  $35.59$ secunde\\
+Counting Sort&  $38$ secunde\\
+Bubble Sort &  $40$ secunde\\
+Bogosort &  $32$ minute\\[1ex]
+
+\hline 
+\end{tabular}
+\label{table:nonlin} 
+\end{table}
+
 \begin{table}[ht]
 \caption{Complexitatea algoritmilor de sortare}
 \centering
@@ -301,15 +333,22 @@ Bogosort &  $10+$ ore\\[1ex]
 Clasamentul este destul de apropiat de cel teoretic.
 Singurele diferențe fiind prezente la algoritmi mai complecși.
 
-Aceste difernțe sunt ușor de explicat prin comportamentul hardware-ului, este posibil ca CPU-ul să priotieze diferit sarcinile. Astfel, un algoritm de lungă durata este pus pe o prioitate mai joasă în comparație cu unul mai rapid. O altă diferență reprezintă și performanța, arhitectura calculatorului și temperatura CPU-ului.  Pentru un algoritm care folosește mai multă putere de calcul, temperatura crește iar CPU-ul nu mai este la fel de performant ca la început.
+Aceste difernțe sunt ușor de explicat prin comportamentul hardware-ului, este posibil ca CPU-ul să priotieze diferit sarcinile. Astfel, un algoritm de lungă durata este pus pe o prioitate mai joasă în comparație cu unul mai rapid. 
+
+\pagebreak
+
+
+O altă diferență reprezintă și performanța, arhitectura calculatorului și temperatura CPU-ului. Pentru un algoritm care folosește mai multă putere de calcul, temperatura crește iar CPU-ul nu mai este la fel de performant ca la început.
 De asemenea, diferențele apar si datorită funcționalității algoritmilor, spre exemplu \textbf{Counting sort} este mult mai eficient ca \textbf{Merge Sort} pe elemente cu valori mici, datorită modului în care funcționează algoritmul. \textbf{Bubble Sort} este  mai eficient ca \textbf{Merge Sort} 
 pentru un vector cu 10 elemente, motiv pentru care \textbf{Merge Sort} își păstrează poziția în tabel.
 
 \section{Comparaţia cu literatura}
 \label{sec:comp}
 Lucruri similare au fost abordate în~\cite{LAMFO2019}.
-Este abordată aceeași problemă, diferențe majore se observă în modul de testare, astfel, lucrarea citată prezintă 20 de teste cu dimensiunea vectorului variată între 25000 și 50000 cu numere generate în mod aleatoriu de la 1 la 10000. Rezultatul fiind unul neconclusiv întrucât fiecare algoritm depinde de lista de elemente pe care este implementat. De asemenea, lucrarea pune multă importanță pe stabilitate, lucru pe care l-am considerat irelevant în testele mele.
+Este abordată aceeași problemă, diferențe majore se observă în modul de testare, astfel, lucrarea citată prezintă 20 de teste cu dimensiunea vectorului variată între 25000 și 50000 cu numere generate în mod aleatoriu de la 1 la 10000. Rezultatul fiind unul neconclusiv întrucât fiecare algoritm depinde de lista de elemente pe care este implementat. De asemenea, lucrarea pune multă importanță pe stabilitate, lucru pe care l-am considerat irelevant în testele realizate de mine.
 
+
+\pagebreak
 Această abordare are avantajul preciziei, astfel, rezultatele sunt mult mai precise, marja de evaluare fiind tot mai restrânsă. 
 Însă un dezavantaj major îl reprezintă faptul că numerele sunt aleatoriu introduse, acestea putând să fie deja ordonate și să aibă multe valori care se repetă.
 
@@ -323,12 +362,14 @@ O altă abordare este prezentată în ~\cite{COMP2015}. Abordarea prezentată ia
 Lucrarea a început cu o întrebare formulată în Secțiunea
 ~\ref{sec:introducere}, iar răspunsul constă în faptul că diferențele există. Aceste diferențe pleacă de la hardware-ul folosit și ajung până la datele din practică care ne sunt oferite.
 
-Nu există un algoritm care să fie eficient atât pe un volum de date mic cât și pe un volum de date mari. Este necesară selecționarea lor în funcție de necesitățile impuse de ce anume trebuie rezolvat.
+Nu există un algoritm care să fie eficient atât pe un volum de date mic cât și pe un volum de date mari. 
+
+
+Este necesară selecționarea lor în funcție de necesitățile impuse de ce anume trebuie rezolvat.
 Aceste mici diferențe între teorie și practică sunt normale aproape peste tot. În practică, un algoritm este supus mai multor influențe externe.
 
 Dificultățile întâlnite în această lucrare au fost numeroase, de la insuficiența memoriei pe CPU din Secțiunea \ref{dific}, rezolvată prin crearea succesiva a numerelor aleatorii de la 1-100000, 100000-200000 și așa mai departe. Alte dificultăți au apărut în momentul rulării algoritmilor pe listă, unii algoritmi au avut o durata enormă datorită limitării impuse de hardware.
 
-\pagebreak
 Aceasta lucrare deschide calea și mai multor întrebări, spre exemplu:"Cum se alege algoritmul potrivit pentru un anumit volum de date?" și "Cum se pot îmbina acești algoritmi pentru a obține o eficiență cât mai buna?".
 
 Aceste întrebări pot prezenta un viitor subiect iar felul în care problema din această lucrare a fost abordată poate fi îmbunătățită în viitor.
